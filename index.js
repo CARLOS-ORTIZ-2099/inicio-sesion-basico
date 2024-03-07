@@ -28,8 +28,8 @@ function showOptions() {
     })
 }
 
-welcomeMessage()
-showOptions()
+/* welcomeMessage()
+showOptions() */
 
 function createAccount() {
     let emailnew
@@ -40,13 +40,13 @@ function createAccount() {
     .then((email) => {
         emailnew = email
         console.log('Correo electrónico válido:'.bgBlue, email);
-        createPassword()
-            .then((password) => {
-                passwordnew = password
-                console.log('password válido:'.bgBlue, password)
-                console.log(`${emailnew} - ${passwordnew}`);
-                insertUserToArray({emailnew, passwordnew})
-            } )
+        return createPassword()
+    })
+    .then((password) => {
+        passwordnew = password
+        console.log('password válido:'.bgBlue, password)
+        console.log(`${emailnew} - ${passwordnew}`);
+        insertUserToArray({emailnew, passwordnew})
     }) 
     .catch((error) => console.log(error)) 
 }
@@ -100,10 +100,24 @@ function validateEmail(emailToEvaluate) {
     // creando expresion regular de forma literal
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // evaluando si el email del usuario incluye los caracteres que se indican en la regExp
-   if( emailToEvaluate.length > 20  || !emailRegex.test(emailToEvaluate)){
-    return false
-   }
-   return true
+    if( emailToEvaluate.length > 20  || !emailRegex.test(emailToEvaluate)){
+     return false
+    }
+
+   // tambien validar si el email no esta registrado ya en la DB
+    /* else if(exitsEmail(emailToEvaluate)){
+     return false
+    } */
+    exitsEmail(emailToEvaluate)
+
+    return true
+}
+
+// funcion para validar la existencia del email en la DB
+function exitsEmail(email) {
+    // obtener los datos de la Db
+   const {taskjson} = getArrayUsers()
+    console.log(taskjson);
 }
 
 
@@ -122,4 +136,88 @@ function getArrayUsers() {
 }
 
 
+const test = [
+    {
+      emailnew: 'test@gmail.com',
+      passwordnew: '123456789',
+      id: 1709830374132
+    },
+    {
+      emailnew: 'fiorela@gmail.com',
+      passwordnew: '123456789',
+      id: 1709830767088
+    },
+    {
+        emailnew: 'gabo@gmail.com',
+        passwordnew: '4444444',
+        id: 1709831783072
+    },
+    {
+      emailnew: 'hello@gmail.com',
+      passwordnew: '4444444',
+      id: 1709831783072
+    },
 
+    /*  */
+    {
+        emailnew: 'carlos@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'maria@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'gustavo@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'pamela@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'diana@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'dario@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'fernanda@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+      {
+        emailnew: 'gio@gmail.com',
+        passwordnew: '123456789',
+        id: 1709830767088
+      },
+   
+]
+
+function validar(array, data) {
+    let min = 0
+    let max = array.length - 1
+    let half = Math.floor((min+max)/2)
+console.log(`la mitad es ${half}` .bgCyan);
+    for(let i = min; i<=half; i++){
+        console.log(`iterando ${i} veces`.bgBlue);
+        if(array[i].emailnew === data ){
+           // console.log(`es igual ${i}`);
+            return i
+        }
+        else if(array[max - i].emailnew === data) {
+            //console.log(`es igual ${max - i}`);
+            return max - i
+        }
+    }
+    return -1
+}
+console.log(validar(test, 'diana@gmail.com'))
