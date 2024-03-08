@@ -37,7 +37,7 @@ function initSession() {
     // pedirle al usuario correo y contraseña
     rl.question('inserta tu email '.blue, (emailUser) => {
       //  console.log(`email : ${emailUser}`)
-        rl.question('inserta tu pssword '.blue, (passwordUser) => {
+        rl.question('inserta tu password '.blue, (passwordUser) => {
         //    console.log(`password : ${passwordUser}`);
             if(verifyAccount(emailUser, passwordUser)){
                 rl.close()
@@ -60,13 +60,13 @@ function verifyAccount(email, password) {
      const indexSearch = exitsEmail(email)
 
      if(indexSearch < 0){
-        console.log(`no hay una cuenta registrada con este email ${email}`.red);
+        console.log(`no hay una cuenta registrada con este email ${email} 😰`.red);
         return false
      }else if(taskjson[indexSearch].passwordnew !== password){
-        console.log(`el email existe ${email} pero la contraseña no coincide ${password}`.red);
+        console.log(`el email existe ${email} pero la contraseña no coincide ${password} 😩`.red);
         return false
      }else{
-        console.log(`bienvenido usuari@ :${taskjson[indexSearch].emailnew} con contraseña : ${taskjson[indexSearch].passwordnew}`.green);
+        console.log(`bienvenido usuari@ :${taskjson[indexSearch].emailnew} con contraseña : ${taskjson[indexSearch].passwordnew} 😎`.green);
         return true
      }
 }
@@ -87,6 +87,7 @@ function createAccount() {
         passwordnew = password
         console.log('password válido:'.bgGreen, password)
         console.log(`${emailnew} - ${passwordnew}`.cyan);
+        console.log(`cuenta creada satisfactoriamente 🎉`.cyan);
         insertUserToArray({emailnew, passwordnew})
     }) 
     .catch((error) => console.log(error)) 
@@ -131,7 +132,7 @@ function createPassword() {
 
 function validatePassword(passwordToEvaluate) {
     if(passwordToEvaluate.trim().length < 5 || passwordToEvaluate.trim().length > 15 ){
-        console.log(`el password debe de tener por lo menos 5 caracteres y maximo 15`.red)
+        console.log(`el password debe de tener por lo menos 5 caracteres y maximo 15 😯`.red)
         return false
     }
     return true
@@ -143,13 +144,13 @@ function validateEmail(emailToEvaluate) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // evaluando si el email del usuario incluye los caracteres que se indican en la regExp
     if( emailToEvaluate.length > 20  || !emailRegex.test(emailToEvaluate)){
-        console.log(`el email no cumple con ser un email`.red);
+        console.log(`el email no cumple con ser un email 🤨`.red);
         return false
     }
 
    // tambien validar si el email no esta registrado ya en la DB
     else if(exitsEmail(emailToEvaluate) >= 0){
-        console.log(`no puedes crear una cuenta con un correo ya registrado ${exitsEmail(emailToEvaluate)}`.red);
+        console.log(`no puedes crear una cuenta con un correo ya registrado ${exitsEmail(emailToEvaluate)} 😯`.red);
         return false
     }
     
