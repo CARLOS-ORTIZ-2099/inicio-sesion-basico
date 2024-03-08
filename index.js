@@ -12,7 +12,7 @@ function welcomeMessage() {
 }
 
 function showOptions() {
-    rl.question('elige la opcion que desees\n', (option) => {
+    rl.question('elige la opcion que desees\n'.magenta, (option) => {
         switch(option){
             case ('1'):
                 console.log('iniciar sesion'.green);
@@ -34,8 +34,43 @@ showOptions()
 
 
 function initSession() {
+    // pedirle al usuario correo y contraseña
+    rl.question('inserta tu email '.blue, (emailUser) => {
+      //  console.log(`email : ${emailUser}`)
+        rl.question('inserta tu pssword '.blue, (passwordUser) => {
+        //    console.log(`password : ${passwordUser}`);
+            if(verifyAccount(emailUser, passwordUser)){
+                rl.close()
+            }else{
+                welcomeMessage()
+                showOptions()
+            } 
+        })
+    
+    })
+    // con esos 2 datos buscar en la BD por correo aprovechando que el arreglo de usuarios esta ordenado
+    // si el correo no existe mandar un mensaje al usuario diciendole que el correo no esta registrado
+    // si el correo existe pero la contraseña no coincide mandar un mensaje diciendole que la contraseña no coincide
 
 }
+
+function verifyAccount(email, password) {
+    const {taskjson} = getArrayUsers()
+    // buscando el email
+     const indexSearch = exitsEmail(email)
+
+     if(indexSearch < 0){
+        console.log(`no hay una cuenta registrada con este email ${email}`.red);
+        return false
+     }else if(taskjson[indexSearch].passwordnew !== password){
+        console.log(`el email existe ${email} pero la contraseña no coincide ${password}`.red);
+        return false
+     }else{
+        console.log(`bienvenido usuari@ :${taskjson[indexSearch].emailnew} con contraseña : ${taskjson[indexSearch].passwordnew}`.green);
+        return true
+     }
+}
+
 
 function createAccount() {
     let emailnew
@@ -45,13 +80,13 @@ function createAccount() {
     createEmail()
     .then((email) => {
         emailnew = email
-        console.log('Correo electrónico válido:'.bgBlue, email);
+        console.log('Correo electrónico válido:'.bgGreen, email);
         return createPassword()
     })
     .then((password) => {
         passwordnew = password
-        console.log('password válido:'.bgBlue, password)
-        console.log(`${emailnew} - ${passwordnew}`);
+        console.log('password válido:'.bgGreen, password)
+        console.log(`${emailnew} - ${passwordnew}`.cyan);
         insertUserToArray({emailnew, passwordnew})
     }) 
     .catch((error) => console.log(error)) 
@@ -60,7 +95,7 @@ function createAccount() {
 
 function createEmail() {
     return new Promise((resolve, reject) => {
-        rl.question('Inserta tu email: ', (emailUser) => {
+        rl.question('Inserta tu email: '.yellow, (emailUser) => {
             // Hacer la validación del email
             if (!validateEmail(emailUser)) {
                // console.log('email no válido'.red);
@@ -80,7 +115,7 @@ function createEmail() {
 
 function createPassword() {
     return new Promise((resolve, reject) => {
-        rl.question('inserta tu password ', (passwordUser) => {
+        rl.question('inserta tu password '.yellow, (passwordUser) => {
             if(!validatePassword(passwordUser)){
                // console.log('password no valido'.red);
                 createPassword()
